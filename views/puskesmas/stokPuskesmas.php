@@ -4,7 +4,9 @@
     // require_once 'functionsPuskesmas.php';
     $stok = query("SELECT * FROM stokpuskesmas
     INNER JOIN obat ON stokpuskesmas.obat_id = obat.kode_obat ORDER BY tanggal_update DESC");
-
+    $stokOb = query("SELECT * FROM stok 
+    INNER JOIN obat ON stok.kode_obat = obat.kode_obat ORDER BY nama_obat ASC
+    ");
 
 ?>
 <?php if(isset($_SESSION['eksekusi'])): ?>
@@ -30,13 +32,14 @@ endif;
 ?>
               <div id="layoutSidenav_content">
                 <main>
+                <?php require_once '../partials/listobat.php' ?>
                     <div class="container-fluid px-4">
                      
 
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Stok Obat Puskesmas
+                                Riwayat Obat Diterima
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -47,21 +50,8 @@ endif;
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                             <th>Tanggal Update</th>
-                                            <th>Aksi</th>
-                                            <th>Request Obat</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Obat</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
-                                            <th>Tanggal Update</th>
-                                            <th>Aksi</th>
-                                            <th>Request Obat</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody> 
                                         <?php $i = 1; ?>
                                             <?php foreach( $stok as $row ) : ?>
@@ -71,13 +61,6 @@ endif;
                                                 <td><?= $row["jumlah_stok"] ?></td>
                                                 <td><?= $row["obat_satuan"] ?></td>
                                                 <td><?= $row["tanggal_update"] ?></td>
-                                                <td>
-                                                <button type="button" class="btn btn-success"><a href="ubahStokPuskesmas.php?id=<?= $row["id"]; ?>"><i class='bx bx-edit-alt' ></i></a></button>&nbsp;
-                                                <button type="button" class="btn btn-danger"><a href="hapusStokPuskesmas.php?id=<?= $row["id"]; ?>" onclick="return confirm('data akan terhapus')"><i class='bx bx-trash'></i></a></button>
-                                                </td>
-                                                <td>
-                                                <button type="button" class="btn btn-primary"><a href="puskesmas_formreq.php?id=<?= $row["obat_id"]; ?>"><i class='bx bx-mail-send'></i></i></a></button>&nbsp;
-                                                </td>
                                     
                                                 </tr>
                                             <?php $i++; ?>
@@ -86,7 +69,9 @@ endif;
                                 </table>
                             </div>
                         </div>
+                        
                     </div>
+                
                 </main>
         </div>
         <?php require_once '../partials/footer.php' ?>
